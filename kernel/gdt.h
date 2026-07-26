@@ -7,7 +7,7 @@
 
 #define GDT_ENTRIES 3
 
-struct gdt_entry {
+struct gdt_entry {??? who?
     uint16_t limit_low;  //lower 16 bit limit
     uint16_t base_low;  // lower 16 bit base
     uint8_t base_middle;  // the next 8 bit base

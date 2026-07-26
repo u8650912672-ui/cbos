@@ -1,4 +1,5 @@
 #include "vga.h"
+#include "io.h"
 #include <stdbool.h>
 //vga text mode constant
 #define VGA_WIDTH 80
