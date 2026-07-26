@@ -18,6 +18,7 @@ void kmain(unsigned int magic, unsigned int addr)
 {
     // stage 2.1 just clear screen and set some vga stuff and text
     vga_clear();
+    vga_init();
     vga_set_color(VGA_COLOR_WHITE, VGA_COLOR_BLACK);
     vga_print("welcome to a non linux or windows os (its called cinder block os or something or cbos for short :3)");
 
