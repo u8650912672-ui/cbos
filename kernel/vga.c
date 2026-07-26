@@ -61,25 +61,23 @@ void vga_putchar(char c)
     if (c == '\n') {
         cursor_row++;
         cursor_col = 0;
-    } else {
-        cursor_col = 0;
     } else if (c == '\t') {
-        do {
-            vga_putchar(' ');
-        } while (cursor_col % 8 != 0);
+        do { vga_putchar(' '); } while (cursor_col % 8 != 0);
+        return;
+    } else if (c == '\b') {
+        if (cursor_col > 0) {
+            cursor_col--;
+            size_t index = cursor_row * VGA_WIDTH + cursor_col;
+            vga_buffer[index] = (uint16_t)((' ' & 0xFF) | (current_color << 8));
+        }
+        return;
     } else {
         size_t index = cursor_row * VGA_WIDTH + cursor_col;
         vga_buffer[index] = (uint16_t)((c & 0xFF) | (current_color << 8));
         cursor_col++;
-        }
-    if (cursor_col >= VGA_WIDTH) {
-        cursor_col = 0;
-        cursor_row++;
     }
-    while (cursor_row >= VGA_HEIGHT) {
-        vga_scroll();
-        cursor_row--;
-    }
+    if (cursor_col >= VGA_WIDTH) { cursor_col = 0; cursor_row++; }
+    while (cursor_row >= VGA_HEIGHT) { vga_scroll(); cursor_row--; }
     vga_update_cursor();
 }
 // code here is no need to change it :3 hope i didnt fuck your brain

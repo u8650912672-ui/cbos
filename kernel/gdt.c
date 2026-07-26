@@ -1,6 +1,6 @@
 #include "gdt.h"
 //the actual gdt table
-static struct gdt_entry gdt[GDT_ENTRIES]; __attribute__((aligned(8)));
+static struct gdt_entry gdt[GDT_ENTRIES] __attribute__((aligned(8)));
 
 //gdt pointer
 static struct gdt_ptr gp;
