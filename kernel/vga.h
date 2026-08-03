@@ -30,6 +30,7 @@ void vga_putchar(char c);
 void vga_print(const char *str);
 void vga_set_cursor(uint8_t row, uint8_t col); // yes hardware cursor amazing am i rigth?
 void vga_get_cursor(uint8_t *row, uint8_t *col);
+void vga_print_int(uint32_t num);
 
 #endif
 //i did this and rigth after i hated myself cuz i had to deal with vga.c :c i dont even know if anyone is gonna ever read this sadly

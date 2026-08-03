@@ -40,6 +40,7 @@ static void print_hex(uint32_t num) {
 
 //exp handler for exception printing and halt
 static void excep_handler(int num, struct interrupt_frame *frame) {
+    (void)frame;
     vga_set_color(VGA_COLOR_RED, VGA_COLOR_BLACK);
     vga_print("Exception #");
     print_hex(num);
@@ -55,6 +56,7 @@ __attribute__((interrupt)) void isr##num(struct interrupt_frame *frame) { \
 
 #define DEFINE_ISR_ERR(num) \
 __attribute__((interrupt)) void isr##num(struct interrupt_frame *frame, unsigned int error_code) { \
+    (void)error_code; \
     excep_handler(num, frame); \
 }
 DEFINE_ISR(0)  DEFINE_ISR(1)  DEFINE_ISR(2)  DEFINE_ISR(3)
@@ -70,11 +72,6 @@ DEFINE_ISR(18) DEFINE_ISR(19) DEFINE_ISR(20) DEFINE_ISR(21)
 DEFINE_ISR(22) DEFINE_ISR(23) DEFINE_ISR(24) DEFINE_ISR(25)
 DEFINE_ISR(26) DEFINE_ISR(27) DEFINE_ISR(28) DEFINE_ISR(29)
 DEFINE_ISR(30) DEFINE_ISR(31)
-//generate handlers for IRQs 0-15
-DEFINE_IRQ(0)  DEFINE_IRQ(1)  DEFINE_IRQ(2)  DEFINE_IRQ(3)
-DEFINE_IRQ(4)  DEFINE_IRQ(5)  DEFINE_IRQ(6)  DEFINE_IRQ(7)
-DEFINE_IRQ(8)  DEFINE_IRQ(9)  DEFINE_IRQ(10) DEFINE_IRQ(11)
-DEFINE_IRQ(12) DEFINE_IRQ(13) DEFINE_IRQ(14) DEFINE_IRQ(15)
 
 //public functions
 void idt_set_gate(uint8_t num, uint32_t base, uint16_t sel, uint8_t flags) {
@@ -104,12 +101,6 @@ void idt_init(void) {
     SET_EXCEPTION(20); SET_EXCEPTION(21); SET_EXCEPTION(22); SET_EXCEPTION(23);
     SET_EXCEPTION(24); SET_EXCEPTION(25); SET_EXCEPTION(26); SET_EXCEPTION(27);
     SET_EXCEPTION(28); SET_EXCEPTION(29); SET_EXCEPTION(30); SET_EXCEPTION(31);
-    //install THE FUCKING IRQ HANDLERS
-    #define SET_IRQ(num) idt_set_gate(32 + num, (uint32_t)irq##num, 0x08, 0x8E)
-    SET_IRQ(0);  SET_IRQ(1);  SET_IRQ(2);  SET_IRQ(3);
-    SET_IRQ(4);  SET_IRQ(5);  SET_IRQ(6);  SET_IRQ(7);
-    SET_IRQ(8);  SET_IRQ(9);  SET_IRQ(10); SET_IRQ(11);
-    SET_IRQ(12); SET_IRQ(13); SET_IRQ(14); SET_IRQ(15);
 
     //finally load the idt into the cpu :3
     __asm__ volatile ("lidt %0" : : "m"(idtp));

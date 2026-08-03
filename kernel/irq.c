@@ -60,8 +60,6 @@ static void (*irq_stubs[16])(struct interrupt_frame *) = {
 
 //PIC remap
 static void pic_remap(void) {
-    uint8_t a1 = inb(PIC1_DATA);
-    uint8_t a2 = inb(PIC2_DATA);
     outb(PIC1_CMD, ICW1_INIT | ICW1_ICW4);
     outb(PIC2_CMD, ICW1_INIT | ICW1_ICW4);
     outb(PIC1_DATA, 0x20);

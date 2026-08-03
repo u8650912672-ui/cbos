@@ -16,6 +16,8 @@
 //line under this did not take me a few minutes i was just asking some higher smarter folks about it :3
 void kmain(unsigned int magic, unsigned int addr)
 {
+    (void)magic;
+    (void)addr;
     // stage 2.1 just clear screen and set some vga stuff and text
     vga_init();
     vga_set_color(VGA_COLOR_WHITE, VGA_COLOR_BLACK);

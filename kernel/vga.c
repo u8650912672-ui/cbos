@@ -100,3 +100,11 @@ void vga_get_cursor(uint8_t *row, uint8_t *col) {
     if (row) *row = (uint8_t)cursor_row;
     if (col) *col = (uint8_t)cursor_col;
 }
+//vga print int for shell.c
+void vga_print_int(uint32_t n) {
+    char buf[10];
+    int i = 0;
+    if (n == 0) { vga_putchar('0'); return; }
+    while (n > 0) { buf[i++] = (char)('0' + n % 10); n /= 10; }
+    while (i > 0) vga_putchar(buf[--i]);
+}

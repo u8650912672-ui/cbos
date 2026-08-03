@@ -63,8 +63,8 @@ static void gdt_reload_segments(void) {
         : "memory"
     );
     __asm__ volatile(
-        "ljmp $0x08, $lf\n" //kernel code selector
-        "l:\n"
+        "ljmp $0x08, $1f\n" //kernel code selector
+        "1:\n"
         :
         :
         : "memory"

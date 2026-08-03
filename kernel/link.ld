@@ -1,19 +1,15 @@
 ENTRY(_start)
 
 SECTIONS {
-    . = 1M;                 /* kernel 1 mib? i think */
+    . = 1M;
 
-    .multiboot : {
-        *(.multiboot)
-    }
+    .multiboot : { *(.multiboot) }
 
-    .text : {
-        *(.text)
-    }
+    .text :   { *(.text) }
 
-    .data : {
-        *(.data)
-    }
+    .rodata : { *(.rodata) }
+
+    .data :   { *(.data) }
 
     .bss : {
         __bss_start = .;

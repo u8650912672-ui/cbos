@@ -15,8 +15,8 @@ GRUB_MKRESCUE = grub-mkrescue
 
 #flags
 ASMFLAGS = -f elf32
-CC_FLAGS = -m32 -ffreestanding -nostdlib -nostdinc -fno-builtin -fno-stack-protector \
-	-I$(KERNEL_DIR) -I$(FS_DIR) -Wall -Wextra -Werror
+CC_FLAGS = -m32 -ffreestanding -nostdlib -fno-builtin -fno-stack-protector \
+	-mgeneral-regs-only -I$(KERNEL_DIR) -I$(FS_DIR) -Wall -Wextra -Werror
 
 LD_FLAGS = -m elf_i386 -T $(KERNEL_DIR)/link.ld
 LD_LIBS = -lgcc
