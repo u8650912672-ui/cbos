@@ -25,6 +25,7 @@
 void irq_init(void);
 
 //reigster a handler for a an irq 
+struct interrupt_frame;
 void irq_register_handler(int irq, void (*handler)(struct interrupt_frame *));
 
 

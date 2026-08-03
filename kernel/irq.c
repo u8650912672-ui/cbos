@@ -85,7 +85,7 @@ void irq_enable(int irq) {
     uint8_t mask;
     if (irq < 8) {
         port = PIC1_DATA;
-        mark = ~(1 << irq);
+        mask = ~(1 << irq);
     } else {
         port = PIC2_DATA;
         mask = ~(1 << (irq - 8));
