@@ -21,8 +21,6 @@ void kmain(unsigned int magic, unsigned int addr)
     // stage 2.1 just clear screen and set some vga stuff and text
     vga_init();
     vga_set_color(VGA_COLOR_WHITE, VGA_COLOR_BLACK);
-    vga_print("welcome to a non linux or windows os (its called cinder block os or something or cbos for short :3)");
-
     //stage 2.2 segmentation ofc its needed but whatever
     gdt_init();
 
@@ -45,8 +43,6 @@ void kmain(unsigned int magic, unsigned int addr)
     // mem_init();   supposed to be bitmap of physical memory
     // paging_init();  page tables
     // heap_init();  kmalloc/kfree search if you dont understand i wont try explaining them
-
-    vga_print("system has probably came far enough to be called  \"booted\" so be happy" );
     
     //stage 2.9 finally you can see something?
     shell_run(); //WOW A SHELKLLLL!?!??!?! NO WAY HE DID THAT!!!11!1!!
