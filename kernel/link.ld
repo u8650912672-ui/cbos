@@ -15,5 +15,6 @@ SECTIONS {
         __bss_start = .;
         *(.bss)
         __bss_end = .;
+        __kernel_end = .;
     }
 }
