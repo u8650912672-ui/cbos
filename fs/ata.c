@@ -1,5 +1,3 @@
-//startup shit
-
 #include "ata.h"
 #include "io.h"
 #include "vga.h"
@@ -42,8 +40,11 @@ static int drive_present = 0;
 //helpers wait for BSY to clear up
 
 static void ata_wait_bsy(void) {
-    while (inb(ATA_PRIMARY_IO + ATA_STATUS) & ATA_STATUS_BSY);
-    __asm__ volatile ("pause");
+    int tries = 0;
+    while (inb(ATA_PRIMARY_IO + ATA_STATUS) & ATA_STATUS_BSY) {
+        __asm__ volatile ("pause");
+        if (++tries > 100000) return;
+    }
 }
 static void ata_wait_drq(void) {
     uint8_t status;
@@ -102,4 +103,58 @@ static int ata_identify(void) {
     return 1;
 }
 
-//public apis TODO : PLEASE 
+//public apis  
+
+void ata_init(void) {
+    drive_present = ata_identify();
+    if (drive_present) {
+        vga_print(" a drive may have been found, master drive\n");
+    } else {
+        vga_print(" nuuu i didnt find a drive sowwyyy (check if its connected)\n");
+    }
+}
+int ata_drive_present() {
+    return drive_present;
+}
+int ata_read_sectors(uint32_t lba, uint8_t count, uint16_t *buffer) {
+    if (!drive_present || count == 0) return -1; //error if no drive is there or count is 0 cuz im stupid at coding
+    ata_wait_bsy();
+    ata_select_drive(lba);
+    outb(ATA_PRIMARY_IO + ATA_SECTOR_COUNT, count);
+    outb(ATA_PRIMARY_IO + ATA_LBA_LOW,   (lba >> 0)  & 0xFF);
+    outb(ATA_PRIMARY_IO + ATA_LBA_MID,  (lba >> 8)  & 0xFF);
+    outb(ATA_PRIMARY_IO + ATA_LBA_HIGH, (lba >> 16) & 0xFF);
+    outb(ATA_PRIMARY_IO + ATA_COMMAND, ATA_CMD_READ_PIO);
+    for (uint8_t i = 0; i < count; i++) {
+        ata_wait_bsy();
+        if (ata_check_error() < 0) return -1;
+        ata_wait_drq();
+        for (int j = 0; j < 256; j++) {
+            *buffer++ = inw(ATA_PRIMARY_IO + ATA_DATA);
+        }
+    }
+    return 0;
+}
+int  ata_write_sectors(uint32_t lba, uint8_t count, const uint16_t *buffer) {
+    if (!drive_present || count == 0) return -1; //more error check
+    ata_wait_bsy();
+    ata_select_drive(lba);
+    outb(ATA_PRIMARY_IO + ATA_SECTOR_COUNT, count);
+    outb(ATA_PRIMARY_IO + ATA_LBA_LOW,   (lba >> 0)  & 0xFF);
+    outb(ATA_PRIMARY_IO + ATA_LBA_MID,  (lba >> 8)  & 0xFF);
+    outb(ATA_PRIMARY_IO + ATA_LBA_HIGH, (lba >> 16) & 0xFF);
+    
+    //send write :3
+    
+    outb(ATA_PRIMARY_IO + ATA_COMMAND, ATA_CMD_WRITE_PIO);
+    for (uint8_t i = 0; i < count; i++) {
+        ata_wait_bsy();
+        if (ata_check_error() < 0) return -1;
+        ata_wait_drq();
+        for (int j = 0; j < 256; j++) {
+            outw(ATA_PRIMARY_IO + ATA_DATA, *buffer++);
+        }
+        ata_wait_bsy();
+    }
+    return 0;
+}

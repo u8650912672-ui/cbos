@@ -23,11 +23,11 @@ static void cmd_status(int argc, char **argv);
 
 //command table
 static const command_t commands[] = {
-        { "help",   cmd_help,   "command help is a helpcommand avalible commands may include echo clear reboot and status" },
-    { "echo",   cmd_echo,   "echo... its echo" },
-    { "clear",  cmd_clear,  "to much shit on screen" },
-    { "reboot", cmd_reboot, "reboot." },
-    { "status", cmd_status, "status of the system ticks" },
+        { "help",   cmd_help,   "command help is a helpcommand avalible commands may include echo clear reboot and status\n" },
+    { "echo",   cmd_echo,   "echo... its echo\n" },
+    { "clear",  cmd_clear,  "to much shit on screen\n" },
+    { "reboot", cmd_reboot, "reboot.\n" },
+    { "status", cmd_status, "status of the system ticks\n" },
     { NULL,     NULL,       NULL }
 };
 
@@ -64,7 +64,7 @@ static void cmd_reboot(int argc, char **argv) {
 static void cmd_status(int argc, char **argv) {
     (void)argc; (void)argv;
     vga_print("system has been running for: ");
-    vga_print_int(timer_get_ticks()); //need to implement the things vga_print_int
+    vga_print_int(timer_get_ticks()); //need to implement the things vga_print_int done
     vga_print(" ticks (~");
     vga_print_int(timer_get_ticks() / 100);
     vga_print(" seconds)\n");
@@ -92,9 +92,9 @@ static int tokenize(char *input, char **argv, int max_args) {
 void shell_run(void) {
     char input_buf[256];
     char *argv[16];
-    vga_print("\nCBOS or CDOS has booted succsefully");
-    vga_print("type help for a list of commands :3");
-    vga_print("this os is made by a furry femboy stop using this if you are tranphobic cuz all your friends will think you are uncool >:c");
+    vga_print("\nCBOS or CDOS has booted succsefully\n");
+    vga_print("type help for a list of commands :3\n");
+    vga_print("this os is made by a furry femboy stop using this if you are tranphobic cuz all your friends will think you are uncool >:c \n");
     while (1) {
         vga_print("x$");
         int pos = 0;

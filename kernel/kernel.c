@@ -7,6 +7,7 @@
 #include "timer.h"
 #include "keyboard.h"
 #include "shell.h"
+#include "ata.h"
 
 //because i am not done with soem stuff
 //#include "mem.h"
@@ -19,24 +20,36 @@ void kmain(unsigned int magic, unsigned int addr)
     (void)magic;
     (void)addr;
     // stage 2.1 just clear screen and set some vga stuff and text
+    
     vga_init();
     vga_set_color(VGA_COLOR_WHITE, VGA_COLOR_BLACK);
+    
     //stage 2.2 segmentation ofc its needed but whatever
+    
     gdt_init();
 
     //stage 2.3 interupt something table
+    
     idt_init();
 
     // stage 2.4 remap PIC and install irq handlers
+    
     irq_init();
 
     // stage 2.5 start the pit timer (NOT FROM F1 PIT)
+    
     timer_init();
 
     // stage 2.6 enable keyboards and mosues and stuff?
+
     keyboard_init();
 
+    //stage 2.6.5 run ata
+
+    ata_init();
+
     //stage 2.7 hardware interupt calls cpu now sees teh calls :D what will it doo?? idfk? ignore?
+    
     __asm__ volatile ("sti");
 
     // stage 2.8 is not yet complete therefore its in parethases
@@ -45,9 +58,12 @@ void kmain(unsigned int magic, unsigned int addr)
     // heap_init();  kmalloc/kfree search if you dont understand i wont try explaining them
     
     //stage 2.9 finally you can see something?
+    
     shell_run(); //WOW A SHELKLLLL!?!??!?! NO WAY HE DID THAT!!!11!1!!
 
     //and 2.9.5 cuz i know it can mess up
+    
     for (;;) __asm__ volatile ("hlt");
+    
     //dont worry about this its in case the previus line ever returns, hang :D
 }
